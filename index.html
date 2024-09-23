@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>To-Do List</title>
+</head>
+<body>
+    <h1 class="HeadName">Welcome to To-Do List</h1>
+    <div id="createListSection">
+        <button id="createListBtn">Create New List</button>
+    </div>
+    <div id="listContainer" style="display: none;">
+        <input type="text" id="listName" placeholder="Enter list name">
+        <button id="startListBtn">Start</button>
+    </div>
+    <div id="todoList" style="display: none;">
+        <h2 id="currentListName"></h2>
+        <input type="text" id="newItem" placeholder="Add new item">
+        <button id="addItemBtn">Add</button>
+        <ol id="items"></ol>
+        <button id="completeListBtn">Complete List</button>
+    </div>
+    <div id="completedLists"></div>
+    
+
+    <script>
+        const createListSection = document.getElementById('createListSection');
+        const createListBtn = document.getElementById('createListBtn');
+        const listContainer = document.getElementById('listContainer');
+        const listName = document.getElementById('listName');
+        const startListBtn = document.getElementById('startListBtn');
+        const todoList = document.getElementById('todoList');
+        const currentListName = document.getElementById('currentListName');
+        const newItem = document.getElementById('newItem');
+        const addItemBtn = document.getElementById('addItemBtn');
+        const items = document.getElementById('items');
+        const completeListBtn = document.getElementById('completeListBtn');
+        const completedLists = document.getElementById('completedLists');
+
+        createListBtn.addEventListener('click', () => {
+            listContainer.style.display = 'block';
+            createListSection.style.display = 'none';
+        });
+
+        startListBtn.addEventListener('click', () => {
+            if (listName.value.trim() !== '') {
+                currentListName.textContent = listName.value;
+                todoList.style.display = 'block';
+                listContainer.style.display = 'none';
+            } else {
+                alert('Please enter a list name');
+            }
+        });
+
+        addItemBtn.addEventListener('click', addItem);
+
+        newItem.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addItem();
+            }
+        });
+
+        function addItem() {
+            if (newItem.value.trim() !== '') {
+                const li = document.createElement('li');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.addEventListener('change', function() {
+                    li.style.textDecoration = this.checked ? 'line-through' : 'none';
+                });
+                li.appendChild(checkbox);
+                li.appendChild(document.createTextNode(newItem.value));
+                items.appendChild(li);
+                newItem.value = '';
+                updateItemNumbers();
+            }
+        }
+
+        function updateItemNumbers() {
+            const listItems = items.getElementsByTagName('li');
+            for (let i = 0; i < listItems.length; i++) {
+                listItems[i].setAttribute('value', i + 1);
+            }
+        }
+
+        completeListBtn.addEventListener('click', () => {
+            const completedList = document.createElement('div');
+            completedList.className = 'completed-list';
+            
+            const listTitle = document.createElement('h3');
+            listTitle.textContent = currentListName.textContent;
+            completedList.appendChild(listTitle);
+
+            const itemsList = document.createElement('ol');
+            let totalItems = 0;
+            Array.from(items.children).forEach((item, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${index + 1}. ${item.textContent}`;
+                if (item.querySelector('input').checked) {
+                    listItem.classList.add('checked');
+                }
+                itemsList.appendChild(listItem);
+                totalItems++;
+            });
+            completedList.appendChild(itemsList);
+
+            const totalItemsElement = document.createElement('p');
+            totalItemsElement.textContent = `Total items: ${totalItems}`;
+            completedList.appendChild(totalItemsElement);
+
+            const shareBtn = document.createElement('button');
+            shareBtn.textContent = 'Share List';
+            shareBtn.addEventListener('click', () => shareList(completedList));
+            completedList.appendChild(shareBtn);
+
+            completedLists.appendChild(completedList);
+
+            // Reset current list
+            currentListName.textContent = '';
+            items.innerHTML = '';
+            todoList.style.display = 'none';
+            createListSection.style.display = 'block';
+        });
+
+        function shareList(list) {
+            const listContent = list.innerText;
+            const shareText = `Check out my completed To-Do List:\n\n${listContent}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Completed To-Do List',
+                    text: shareText
+                }).then(() => {
+                    console.log('Thanks for sharing!');
+                }).catch(console.error);
+            } else {
+                // Fallback for browsers that don't support the Web Share API
+                prompt('Copy this text to share your list:', shareText);
+            }
+        }
+    </script>
+</body>
+</html>

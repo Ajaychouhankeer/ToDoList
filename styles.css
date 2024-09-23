@@ -1,0 +1,89 @@
+
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+h1, h2, h3 {
+    text-align: center;
+    color: #333;
+}
+button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+input[type="text"] {
+    width: 70%;
+    padding: 10px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+ol {
+    padding-left: 20px;
+}
+li {
+    background-color: #b6aeae;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+li input[type="checkbox"] {
+    margin-right: 10px;
+}
+.list-container {
+    background-color: #d6cbcb;
+    border-radius: 4px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.completed-list {
+    background-color: #e6ffe6;
+    border: 1px solid #4CAF50;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 20px;
+}
+.completed-list ol {
+    padding-left: 20px;
+}
+.completed-list li {
+    background-color: transparent;
+    padding: 5px 0;
+}
+.completed-list li.checked {
+    text-decoration: line-through;
+}
+@media (max-width: 600px) {
+    input[type="text"] {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px){
+    #createListBtn {
+        padding-left: 30px;
+        margin-left: 50px;
+    }
+
+    .HeadName{
+        font-size: medium;
+    }
+}
+
+    
+
+
